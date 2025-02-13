@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ies.thiar.concesionario.model.Cliente;
@@ -26,10 +25,7 @@ public class ClienteController {
 
     //http://localhost:8080/api/clientes
     @GetMapping
-    public List<Cliente> findAll(@RequestParam(value = "marca", required = false) String marca){
-        if(marca != null){
-            return clienteService.findByMarca(marca);
-        }
+    public List<Cliente> findAll(){
         return clienteService.getAllClientes();
     }
 

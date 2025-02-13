@@ -11,5 +11,4 @@ public interface ClienteService {
     Cliente findClienteByDni(String dni); 
     Cliente updateCliente(Cliente cliente); 
     void deleteCliente(long id); 
-    List<Cliente> findByMarca(String ford);
 }

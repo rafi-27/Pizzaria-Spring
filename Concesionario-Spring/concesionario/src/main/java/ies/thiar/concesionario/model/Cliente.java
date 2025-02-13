@@ -1,5 +1,6 @@
 package ies.thiar.concesionario.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -21,18 +22,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Cliente {
-    @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private Long id;
+    /**
+     * Cliente. Representa un cliente que realiza un pedido.
+     */
 
-    @Column(unique=true, nullable=false)
+    // Atributos:
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
+
+    @Column(unique = true, nullable = false)
     private String dni;
     private String nombre;
-    private String apellidos;
-
-    @Column(unique=true, nullable=false)
+    private String direccion;
     private String telefono;
 
-    @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Coche> coches;
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    private String password;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pedido> listaPedidos = new ArrayList<>();
+
+    // Nuevo atributo
+    private boolean esAdministrador;
 }

@@ -22,7 +22,6 @@ public class ClienteServiceImp implements ClienteService {
         if (clienteRepository.existsByDni(empleado.getDni())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe el cliente con ese dni.");
         }
-        empleado.getCoches().forEach(coche -> coche.setPropietario(empleado));
         return clienteRepository.save(empleado);
     }
 
@@ -60,10 +59,4 @@ public class ClienteServiceImp implements ClienteService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado con Id: " + id);
         }
     }
-
-    @Override
-    public List<Cliente> findByMarca(String marca) {
-        return clienteRepository.findClientesByCocheMarca(marca);
-    }
-
 }
