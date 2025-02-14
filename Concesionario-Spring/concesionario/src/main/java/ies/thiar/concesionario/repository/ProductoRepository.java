@@ -9,5 +9,4 @@ import ies.thiar.concesionario.model.Producto;
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     boolean existsByNombre(String nombre);
     Optional<Producto> findByNombre(String nombre);
-
 }

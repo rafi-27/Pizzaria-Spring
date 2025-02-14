@@ -1,5 +1,6 @@
 package ies.thiar.concesionario.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,38 +27,62 @@ public class ClienteController {
     //http://localhost:8080/api/clientes
     @GetMapping
     public List<Cliente> findAll(){
-        return clienteService.getAllClientes();
+        try {
+            return clienteService.getAllClientes();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     //http://localhost:8080/api/clientes/1
     @GetMapping("{id}")
     public ResponseEntity<Cliente> findClienteById(@PathVariable("id") long clienteId){
-        return new ResponseEntity<>(clienteService.findClienteById(clienteId),HttpStatus.CONFLICT);
+        try {
+            return new ResponseEntity<>(clienteService.findClienteById(clienteId),HttpStatus.CONFLICT);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping("/dni/{dni}")
     public ResponseEntity<Cliente> findClienteByDni(@PathVariable("dni") String clienteDni){
-        return new ResponseEntity<>(clienteService.findClienteByDni(clienteDni),HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(clienteService.findClienteByDni(clienteDni),HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @PostMapping
     public ResponseEntity<Cliente>saveCliente(@RequestBody Cliente cliente){
-        return new ResponseEntity<>(clienteService.save(cliente),HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(clienteService.save(cliente),HttpStatus.CREATED);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-
-    // @GetMapping("/filtro")
-    // public List<Cliente> getClientesByMarcaCoche(@RequestParam("marca") String marca){
-    //     return clienteService.findByMarca(marca);
-    // }
 
     @PutMapping
     public ResponseEntity<Cliente>updateCliente(@RequestBody Cliente cliente){
-        return new ResponseEntity<>(clienteService.updateCliente(cliente),HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(clienteService.updateCliente(cliente),HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCliente(@PathVariable("id") long id) {
-        clienteService.deleteCliente(id);
+        try {
+            clienteService.deleteCliente(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.noContent().build();
     }
 

@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 public class Pedido {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private int id;
+    private long id;
 
     @Temporal(TemporalType.DATE)
     private Date fecha;

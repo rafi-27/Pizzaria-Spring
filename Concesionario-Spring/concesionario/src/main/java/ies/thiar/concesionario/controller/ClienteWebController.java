@@ -1,5 +1,7 @@
 package ies.thiar.concesionario.controller;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,14 +21,25 @@ public class ClienteWebController {
     @GetMapping
     public String listarClientes(Model model) {
         //Para enviar datos desde el Controller a la vista se usa model que almacena pares clave-valor
-        model.addAttribute("clientes", clienteService.getAllClientes());
+        try {
+            model.addAttribute("clientes", clienteService.getAllClientes());
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         System.out.println("Entra en clientes");
         return "clientes"; // El fichero clientes.html debe existir en resources/templates
     }
 
     @GetMapping("/{id}")
     public String verCliente(@PathVariable Long id, Model model) {
-        Cliente cliente = clienteService.findClienteById(id);
+        Cliente cliente = null;
+        try {
+            cliente = clienteService.findClienteById(id);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         model.addAttribute("cliente", cliente);
         return "cliente-detalle"; // El fichero cliente-detalle.html debe existir en resources/templates
     }

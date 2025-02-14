@@ -21,7 +21,7 @@ public class LineaPedido {
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private int id;
+    private long id;
     
     private int cantidad;
 

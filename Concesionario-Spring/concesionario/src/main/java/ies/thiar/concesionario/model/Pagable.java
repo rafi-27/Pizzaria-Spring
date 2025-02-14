@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public abstract class Pagable {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private int id;
+    private long id;
     
     public abstract void pagar(double cantidad);
     public abstract int formaPago();
