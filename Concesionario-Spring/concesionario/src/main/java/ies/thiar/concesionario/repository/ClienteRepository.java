@@ -9,6 +9,7 @@ import ies.thiar.concesionario.model.Cliente;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     boolean existsByDni(String dni);
     Optional<Cliente>findByDni(String dni);
+    // Javi apruebame por favor
 
     // @Query("SELECT c FROM Cliente c JOIN c.coches coche WHERE coche.marca = :marca")
     // List<Cliente>findClientesByCocheMarca(@Param("marca") String marca);

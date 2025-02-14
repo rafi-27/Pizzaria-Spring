@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public abstract class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private long id;
     private String nombre;
     private double precio;
 
