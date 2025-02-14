@@ -56,20 +56,25 @@ public class ProductoServiceImp implements ProductoService{
 
     @Override
     public Producto findProductById(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findProductById'");
+        return productoRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado con Id: " + id));
     }
 
     @Override
     public Producto updateProduct(Producto producto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProduct'");
+        if (productoRepository.existsById(producto.getId())) {
+            return productoRepository.save(producto);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Producto no encontrado con Id: " + producto.getId());
+        }
     }
 
     @Override
     public void deleteProduct(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteProduct'");
+        if (!productoRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado con Id: " + id);
+        }
+        productoRepository.deleteById(id);
     }
-    
 }
