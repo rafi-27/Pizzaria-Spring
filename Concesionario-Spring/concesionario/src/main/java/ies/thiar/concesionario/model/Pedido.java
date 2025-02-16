@@ -1,9 +1,13 @@
 package ies.thiar.concesionario.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,11 +32,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class Pedido {
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
     @Temporal(TemporalType.DATE)
-    private Date fecha;
+    private LocalDate fecha;
     private double precioTotal;
 
     @Enumerated(EnumType.STRING)
@@ -41,9 +45,10 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<LineaPedido> lineaPedido;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Pagable pago;
   
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     private Cliente cliente;
 }

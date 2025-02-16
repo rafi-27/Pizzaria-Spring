@@ -30,4 +30,6 @@ public class LineaPedido {
         
     @ManyToOne(cascade = CascadeType.ALL)
     private Pedido pedido;
+
+    private double precioLineaPedido;
 }

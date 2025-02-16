@@ -34,11 +34,4 @@ public abstract class Producto {
     private long id;
     private String nombre;
     private double precio;
-
-    @Enumerated(EnumType.STRING)
-    private TipoProducto tipoProducto;
-
-    @Enumerated(EnumType.STRING)
-    private SIZE tamanyo;
-
 }

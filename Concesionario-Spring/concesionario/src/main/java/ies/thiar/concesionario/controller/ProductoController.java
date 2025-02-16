@@ -47,16 +47,6 @@ public class ProductoController {
         return null;
     }
 
-    // @GetMapping("/dni/{dni}")
-    // public ResponseEntity<Cliente> findClienteByDni(@PathVariable("dni") String clienteDni){
-    //     try {
-    //         return new ResponseEntity<>(clienteService.findClienteByDni(clienteDni),HttpStatus.OK);
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    //     return null;
-    // }
-
     @PostMapping
     public ResponseEntity<Producto>saveProducto(@RequestBody Producto producto){
         try {
@@ -68,7 +58,7 @@ public class ProductoController {
     }
 
     @PutMapping
-    public ResponseEntity<Producto>updateCliente(@RequestBody Producto producto){
+    public ResponseEntity<Producto>updateProducto(@RequestBody Producto producto){
         try {
             return new ResponseEntity<>(productoService.updateProduct(producto),HttpStatus.OK);
         } catch (SQLException e) {
@@ -78,7 +68,7 @@ public class ProductoController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteCliente(@PathVariable("id") long id) {
+    public ResponseEntity<String> deleteProducto(@PathVariable("id") long id) {
         try {
             productoService.deleteProduct(id);
         } catch (SQLException e) {

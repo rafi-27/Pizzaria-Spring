@@ -48,7 +48,7 @@ public class ProductoServiceImp implements ProductoService{
 
         return productoRepository.save(producto);
     }
-
+    
     @Override
     public List<Producto> getAllProducts() {
         return productoRepository.findAll();

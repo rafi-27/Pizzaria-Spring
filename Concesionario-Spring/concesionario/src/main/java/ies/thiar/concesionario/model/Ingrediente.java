@@ -21,15 +21,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Ingrediente {
-
-    @ElementCollection(fetch=FetchType.EAGER)
-    @CollectionTable(name = "ingrediente_alergenos")
-    private List<String> listaAlergenos;
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @Column(unique = true, nullable = false)
     private String nombre;
+
+    @ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name = "ingrediente_alergenos")
+    private List<String> listaAlergenos;
+
 }
