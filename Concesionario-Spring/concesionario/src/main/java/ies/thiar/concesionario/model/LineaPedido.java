@@ -1,5 +1,7 @@
 package ies.thiar.concesionario.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +29,8 @@ public class LineaPedido {
 
     @OneToOne
     private Producto product;
-        
+    
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     private Pedido pedido;
 
