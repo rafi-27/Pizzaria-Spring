@@ -1,6 +1,7 @@
 package ies.thiar.concesionario.controller;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ies.thiar.concesionario.model.Cliente;
@@ -26,19 +28,24 @@ public class ClienteController {
 
     //http://localhost:8080/api/clientes
     @GetMapping
-    public List<Cliente> findAll(@PathVariable("nombre") String nombreAbuscar){
+    public ResponseEntity<List<Cliente>> findAll(@RequestParam(value = "nombre", required = false) String nombre) {
         try {
-            if(nombreAbuscar != null){
-                return clienteService.getAllClientes().stream().filter(cliente -> cliente.getDni().contains(nombreAbuscar)).toList();
-            }else{
-                return clienteService.getAllClientes();
+            List<Cliente> clientes;
+            
+            if (nombre != null && !nombre.isEmpty()) {
+                clientes = clienteService.getAllClientes().stream()
+                    .filter(cliente -> cliente.getNombre().equalsIgnoreCase(nombre))
+                    .toList();
+            } else {
+                clientes = clienteService.getAllClientes();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return ResponseEntity.ok(clientes);
+    
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
-        return null;
     }
-
+    
     //http://localhost:8080/api/clientes/1
     @GetMapping("{id}")
     public ResponseEntity<Cliente> findClienteById(@PathVariable("id") long clienteId){

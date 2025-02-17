@@ -1,24 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Listado de clientes</title>
 </head>
+
 <body>
-<h1>Clientes</h1>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Teléfono</th>
-    </tr>
-    <tr th:each="cliente : ${clientes}">
-        <td th:text="${cliente.id}"></td>
-        <td th:text="${cliente.nombre}"></td>
-        <td th:text="${cliente.apellidos}"></td>
-        <td th:text="${cliente.telefono}"></td>
-    </tr>
-</table>
+    <h1>Clientes</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>DNI</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Email</th>
+        </tr>
+        <tr th:each="cliente : ${clientes}">
+            <td th:text="${cliente.id}"></td>
+            <td th:text="${cliente.nombre}"></td>
+            <td th:text="${cliente.dni}"></td>
+            <td th:text="${cliente.telefono}"></td>
+            <td th:text="${cliente.direccion}"></td>
+            <td th:text="${cliente.email}"></td>
+        </tr>
+    </table>
 </body>
+
 </html>

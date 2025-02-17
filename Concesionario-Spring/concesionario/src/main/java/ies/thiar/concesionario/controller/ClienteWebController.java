@@ -19,28 +19,15 @@ public class ClienteWebController {
     private ClienteService clienteService;
 
     @GetMapping
-    public String listarClientes(Model model) {
-        //Para enviar datos desde el Controller a la vista se usa model que almacena pares clave-valor
-        try {
-            model.addAttribute("clientes", clienteService.getAllClientes());
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("Entra en clientes");
-        return "clientes"; // El fichero clientes.html debe existir en resources/templates
+    public String listarClientes(Model model) throws SQLException {
+        model.addAttribute("clientes", clienteService.getAllClientes());
+        return "clientes";
     }
 
     @GetMapping("/{id}")
-    public String verCliente(@PathVariable Long id, Model model) {
-        Cliente cliente = null;
-        try {
-            cliente = clienteService.findClienteById(id);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public String verCliente(@PathVariable Long id, Model model) throws SQLException {
+        Cliente cliente = clienteService.findClienteById(id);
         model.addAttribute("cliente", cliente);
-        return "cliente-detalle"; // El fichero cliente-detalle.html debe existir en resources/templates
+        return "cliente-detalle";
     }
 }
