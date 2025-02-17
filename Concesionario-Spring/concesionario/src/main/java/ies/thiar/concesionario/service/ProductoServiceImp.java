@@ -29,24 +29,27 @@ public class ProductoServiceImp implements ProductoService{
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Ya existe un producto con el nombre: " + producto.getNombre());
         }
-
-        if (producto instanceof Pizza pizza) {
-            List<Ingrediente> ingredientesUnicos = pizza.getListaIngredientesPizza().stream()
-                    .map(ing -> ingredienteRepository.findByNombre(ing.getNombre()).orElse(ing))
-                    .distinct()
-                    .collect(Collectors.toList());
+    
+        if (producto instanceof Pizza) {
+            Pizza pizza = (Pizza) producto;
+            List<Ingrediente> ingredientesUnicos = obtenerIngredientesUnicos(pizza.getListaIngredientesPizza());
             pizza.setListaIngredientesPizza(ingredientesUnicos);
             return productoRepository.save(pizza);
-        } else if (producto instanceof Pasta pasta) {
-            List<Ingrediente> ingredientesUnicos = pasta.getListaIngredientePasta().stream()
-                    .map(ing -> ingredienteRepository.findByNombre(ing.getNombre()).orElse(ing))
-                    .distinct()
-                    .collect(Collectors.toList());
+        } else if (producto instanceof Pasta) {
+            Pasta pasta = (Pasta) producto;
+            List<Ingrediente> ingredientesUnicos = obtenerIngredientesUnicos(pasta.getListaIngredientePasta());
             pasta.setListaIngredientePasta(ingredientesUnicos);
             return productoRepository.save(pasta);
         }
-
+    
         return productoRepository.save(producto);
+    }
+    
+    private List<Ingrediente> obtenerIngredientesUnicos(List<Ingrediente> ingredientes) {
+        return ingredientes.stream()
+                .map(ing -> ingredienteRepository.findByNombre(ing.getNombre()).orElse(ing))
+                .distinct()
+                .collect(Collectors.toList());
     }
     
     @Override

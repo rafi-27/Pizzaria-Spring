@@ -26,9 +26,13 @@ public class ClienteController {
 
     //http://localhost:8080/api/clientes
     @GetMapping
-    public List<Cliente> findAll(){
+    public List<Cliente> findAll(@PathVariable("nombre") String nombreAbuscar){
         try {
-            return clienteService.getAllClientes();
+            if(nombreAbuscar != null){
+                return clienteService.getAllClientes().stream().filter(cliente -> cliente.getDni().contains(nombreAbuscar)).toList();
+            }else{
+                return clienteService.getAllClientes();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

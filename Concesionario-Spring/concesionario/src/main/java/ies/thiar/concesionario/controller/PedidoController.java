@@ -24,42 +24,71 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-
     @PostMapping
     public ResponseEntity<Pedido> addLineaPedido(@RequestBody CarritoRequest carritoRequest) {
-        Pedido pedido = pedidoService.addLineaPedido(carritoRequest);
-        return new ResponseEntity<>(pedido, HttpStatus.CREATED);
+        try {
+            Pedido pedido = pedidoService.addLineaPedido(carritoRequest);
+            return new ResponseEntity<>(pedido, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/finalizar")
     public ResponseEntity<Pedido> finalizarPedido(@RequestBody FinalizarPedidoRequest finalizarPedidoRequest) {
-        Pedido pedido = pedidoService.finalizarPedido(finalizarPedidoRequest);
-        return new ResponseEntity<>(pedido, HttpStatus.OK);
+        try {
+            Pedido pedido = pedidoService.finalizarPedido(finalizarPedidoRequest);
+            return new ResponseEntity<>(pedido, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/cancelar/{clienteId}")
     public ResponseEntity<Pedido> cancelarPedido(@PathVariable long clienteId) {
-        Pedido pedido = pedidoService.cancelarPedido(clienteId);
-        return new ResponseEntity<>(pedido, HttpStatus.OK);
+        try {
+            Pedido pedido = pedidoService.cancelarPedido(clienteId);
+            return new ResponseEntity<>(pedido, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/entregar/{pedidoId}")
     public ResponseEntity<Pedido> entregarPedido(@PathVariable int pedidoId) {
-        Pedido pedido = pedidoService.entregarPedido(pedidoId);
-        return new ResponseEntity<>(pedido, HttpStatus.OK);
+        try {
+            Pedido pedido = pedidoService.entregarPedido(pedidoId);
+            return new ResponseEntity<>(pedido, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //GET /api/pedidos
     @GetMapping
     public ResponseEntity<List<Pedido>> getAllPedidos() {
-        List<Pedido> pedidos = pedidoService.getAllPedidos();
-        return new ResponseEntity<>(pedidos, HttpStatus.OK);
+        try {
+            List<Pedido> pedidos = pedidoService.getAllPedidos();
+            return new ResponseEntity<>(pedidos, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //GET /api/pedidos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> getPedidoById(@PathVariable int id) {
-        Pedido pedido = pedidoService.findPedidoById(id);
-        return new ResponseEntity<>(pedido, HttpStatus.OK);
+        try {
+            Pedido pedido = pedidoService.findPedidoById(id);
+            return new ResponseEntity<>(pedido, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

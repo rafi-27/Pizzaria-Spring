@@ -1,6 +1,5 @@
 package ies.thiar.concesionario.controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,54 +25,58 @@ public class ProductoController {
 
     //http://localhost:8080/api/productos
     @GetMapping
-    public List<Producto> findAllProductos(){
+    public ResponseEntity<List<Producto>> findAllProductos() {
         try {
-            return productoService.getAllProducts();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            List<Producto> productos = productoService.getAllProducts();
+            return new ResponseEntity<>(productos, HttpStatus.OK);
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     //http://localhost:8080/api/clientes/1
     @GetMapping("{id}")
-    public ResponseEntity<Producto> findProductoById(@PathVariable("id") long producto_id){
+    public ResponseEntity<Producto> findProductoById(@PathVariable("id") long producto_id) {
         try {
-            return new ResponseEntity<>(productoService.findProductById(producto_id),HttpStatus.CONFLICT);
-        } catch (SQLException e) {
+            Producto producto = productoService.findProductById(producto_id);
+            return new ResponseEntity<>(producto, HttpStatus.OK);
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     @PostMapping
-    public ResponseEntity<Producto>saveProducto(@RequestBody Producto producto){
+    public ResponseEntity<Producto> saveProducto(@RequestBody Producto producto) {
         try {
-            return new ResponseEntity<>(productoService.saveProduct(producto),HttpStatus.CREATED);
-        } catch (SQLException e) {
+            Producto savedProducto = productoService.saveProduct(producto);
+            return new ResponseEntity<>(savedProducto, HttpStatus.CREATED);
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     @PutMapping
-    public ResponseEntity<Producto>updateProducto(@RequestBody Producto producto){
+    public ResponseEntity<Producto> updateProducto(@RequestBody Producto producto) {
         try {
-            return new ResponseEntity<>(productoService.updateProduct(producto),HttpStatus.OK);
-        } catch (SQLException e) {
+            Producto updatedProducto = productoService.updateProduct(producto);
+            return new ResponseEntity<>(updatedProducto, HttpStatus.OK);
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteProducto(@PathVariable("id") long id) {
         try {
             productoService.deleteProduct(id);
-        } catch (SQLException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.noContent().build();
     }
 }

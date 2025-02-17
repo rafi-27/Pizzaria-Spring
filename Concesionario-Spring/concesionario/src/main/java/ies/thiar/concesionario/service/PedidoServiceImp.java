@@ -42,21 +42,22 @@ public class PedidoServiceImp implements PedidoService {
         Producto producto = productoRepository.findById(carritoRequest.getIdProducto())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado."));
 
-        List<Pedido> pedidosPendientes = pedidoRepository.findByClienteIdAndEstado(cliente.getId(),
-                EstadoPedido.PENDIENTE);
+        Pedido pedido = pedidoRepository.findByClienteIdAndEstado(cliente.getId(), EstadoPedido.PENDIENTE)
+                .stream()
+                .findFirst()
+                .orElseGet(() -> {
+                    Pedido nuevoPedido = new Pedido();
+                    nuevoPedido.setCliente(cliente);
+                    nuevoPedido.setFecha(LocalDate.now());
+                    nuevoPedido.setEstado(EstadoPedido.PENDIENTE);
+                    nuevoPedido.setPrecioTotal(0.0);
+                    nuevoPedido.setLineaPedido(new ArrayList<>());
+                    return nuevoPedido;
+                });
 
-        Pedido pedido;
-        if (pedidosPendientes.isEmpty()) {
-            pedido = new Pedido();
-            pedido.setCliente(cliente);
-            pedido.setFecha(LocalDate.now());
-            pedido.setEstado(EstadoPedido.PENDIENTE);
-            pedido.setPrecioTotal(0.0);
-            pedido.setLineaPedido(new ArrayList<>());
-        } else if (pedidosPendientes.size() == 1) {
-            pedido = pedidosPendientes.get(0);
-        } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Este cliente tiene más de un pedido pendiente");
+        if (pedido.getId() > 0
+                && pedidoRepository.findByClienteIdAndEstado(cliente.getId(), EstadoPedido.PENDIENTE).size() > 1) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Este cliente tiene más de un pedido pendiente");
         }
 
         LineaPedido linea = new LineaPedido();
@@ -88,41 +89,43 @@ public class PedidoServiceImp implements PedidoService {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
 
-        List<Pedido> pedidosPendientes = pedidoRepository.findByClienteIdAndEstado(cliente.getId(),
-                EstadoPedido.PENDIENTE);
-        if (pedidosPendientes.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay pedidos pendientes para el cliente");
-        }
-        if (pedidosPendientes.size() > 1) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Este cliente tiene más de un pedido pendiente");
+        Pedido pedido = pedidoRepository.findByClienteIdAndEstado(cliente.getId(), EstadoPedido.PENDIENTE)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No hay pedidos pendientes para el cliente"));
+
+        if (pedidoRepository.findByClienteIdAndEstado(cliente.getId(), EstadoPedido.PENDIENTE).size() > 1) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Este cliente tiene más de un pedido pendiente");
         }
 
-        Pedido pedido = pedidosPendientes.get(0);
         pedido.setEstado(EstadoPedido.CANCELADO);
         return pedidoRepository.save(pedido);
     }
 
     @Override
     public Pedido entregarPedido(long id) {
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido no encontrado"));
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido no encontrado"));
         pedido.setEstado(EstadoPedido.ENTREGADO);
         return pedidoRepository.save(pedido);
     }
 
     @Override
     public Pedido finalizarPedido(FinalizarPedidoRequest finalizarPedidoRequest) {
-         Cliente cliente = clienteRepository.findById(finalizarPedidoRequest.getIdCliente())
+        Cliente cliente = clienteRepository.findById(finalizarPedidoRequest.getIdCliente())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
 
-        List<Pedido> pedidosPendientes = pedidoRepository.findByClienteIdAndEstado(cliente.getId(),EstadoPedido.PENDIENTE);
-        if (pedidosPendientes.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay pedidos pendientes para el cliente");
-        }
-        if (pedidosPendientes.size() > 1) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Existen múltiples pedidos pendientes para el cliente");
-        }
+        Pedido pedido = pedidoRepository.findByClienteIdAndEstado(cliente.getId(), EstadoPedido.PENDIENTE)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No hay pedidos pendientes para el cliente"));
 
-        Pedido pedido = pedidosPendientes.get(0);
+        if (pedidoRepository.findByClienteIdAndEstado(cliente.getId(), EstadoPedido.PENDIENTE).size() > 1) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Existen múltiples pedidos pendientes para el cliente");
+        }
 
         String metodoPago = finalizarPedidoRequest.getPagoMetod().toUpperCase();
         Pagable pago;
