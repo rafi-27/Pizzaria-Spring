@@ -50,7 +50,7 @@ public class ClienteController {
     @GetMapping("{id}")
     public ResponseEntity<Cliente> findClienteById(@PathVariable("id") long clienteId){
         try {
-            return new ResponseEntity<>(clienteService.findClienteById(clienteId),HttpStatus.CONFLICT);
+            return new ResponseEntity<>(clienteService.findClienteById(clienteId),HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
         }
